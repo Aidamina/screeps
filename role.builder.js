@@ -25,7 +25,7 @@ var roleBuilder = {
 	    if(creep.memory.building) {
              var targets = roomState.structures.filter((structure) => {
                 if (structure instanceof StructureWall || structure instanceof StructureRampart){
-                    return structure.hits < 50000;
+                    return structure.hits < 100000;
                 }
                 return structure.hits < structure.hitsMax;
                 

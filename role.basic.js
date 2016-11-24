@@ -35,7 +35,7 @@ var roleBasic = {
 
             var targets = roomState.structures.filter((structure) => {
                 if (structure instanceof StructureWall){
-                    return structure.hits < 20000;
+                    return structure.hits < 50000;
                 }
                 return structure.hits < structure.hitsMax;
                 
@@ -87,6 +87,7 @@ var roleBasic = {
                     if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(creep.room.controller);
                     }
+                    return;
                 }
                
             }
