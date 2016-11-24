@@ -27,7 +27,7 @@ module.exports.loop = function () {
             inDefense = true;
         }
         for(var creep of roomState.my_creeps){
-            if(!keepalive.handle(state, creep)||inDefense){
+            if(!keepalive.handle(roomState, creep)||inDefense){
                 continue;
             }
             

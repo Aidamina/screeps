@@ -10,7 +10,7 @@ var defense = function(roomState){
     
     if(roomState.hostiles.length){
         for(var creep of roomState.my_creeps){
-            creep.moveTo(Game.flags["Safety"]);
+            creep.moveTo(Game.flags[roomState.name+"_Safety"]);
         }
         return true;
     }
