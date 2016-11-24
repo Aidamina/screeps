@@ -17,20 +17,20 @@ var keepalive = {
 
         var charge = (role?role.energyCharge:defaultCharge) || defaultCharge;
         var ticks = creep.ticksToLive;
+        var spawns = roomState.structures.filter(function(structure){return structure instanceof StructureSpawn});
+        if(!spawns.length){
+            console.log("no spawn found in "+roomState.name);
+            return true;
+        }
         if(ticks < charge){
-            result = Game.spawns['Hub'].renewCreep(creep);
+            result = spawns[0].renewCreep(creep);
             if(ticks < 500 && result==ERR_NOT_IN_RANGE){
                 console.log("Creep "+creep.name+" needs renewal");
-                var spawns = roomState.structures.filter(function(structure){return structure instanceof StructureSpawn});
-                if(spawns.length){
-                    creep.moveTo(spawns[0]);
-                    creep.say('renewal');
-                    return false;
+                creep.moveTo(spawns[0]);
+                creep.say('renewal');
+                return false;
 
-                }else{
-                    console.log("no spawn found in "+roomState.name);
-                    return true;
-                }
+                
                 
             }
             if(result==OK){

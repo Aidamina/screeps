@@ -14,7 +14,7 @@ var roleBasic = {
 
     /** @param {Creep} creep **/
     run: function(state, creep) {
-
+        var roomState = state.rooms[creep.room.name];
 	    if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
             
@@ -25,30 +25,64 @@ var roleBasic = {
 
 	    if(creep.memory.building) {
             var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: object => object.hits < object.hitsMax
-                });
+                filter: object => object.hits < object.hitsMax
+            });
+
             targets = targets.sort(function(a,b){return distance(creep, a)-distance(creep, b)});
             if(targets.length) {
                 creep.say("repairing");
                 if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                 }
-            }else{                
-                var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                //targets = targets.sort(function(a,b) { return (a.hits/a.hitsMax) - (b.hits/b.hitsMax)});
-                targets = targets.sort(function(a,b) { return  (a.progressTotal-a.progress)-(b.progressTotal-b.progress)});
+            }else{
+                var targets = roomState.structures.filter((structure) => {
+                if(structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN){
+                    return structure.energy < structure.energyCapacity;
+                    }
+                    return false;
+                });
+                if(!targets.length){
+                    targets = roomState.structures.filter((structure) => {
+                        if(structure.structureType == STRUCTURE_TOWER){
+                            return structure.energy < structure.energyCapacity;
+                        }
+                        return false;
+                    });
+                }
                 
                 if(targets.length) {
-                    creep.say("building");
-                    if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(targets[0]);    
+
+                    targets = targets.sort(function(a,b){return distance(creep, a)-distance(creep, b)});
+                    if(creep.transfer(targets[0], RESOURCE_ENERGY)== ERR_NOT_IN_RANGE) {
+                        creep.moveTo(targets[0]);
                     }
-                }else{
+                    return;
+                }
+                targets = creep.room.find(FIND_CONSTRUCTION_SITES);  
+                if(targets.length) {
+                   
+                    targets = targets.sort(function(a,b) { return  (a.progressTotal-a.progress)-(b.progressTotal-b.progress)});
+
+                    if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(targets[0]);
+                    }
+                    return;
+                }
+                
+                
+                
+                
+                if(!targets.length) {
                     creep.say("upgrading");
                     if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(creep.room.controller);
                     }
                 }
+
+
+
+
+
                
             }
 	    }
