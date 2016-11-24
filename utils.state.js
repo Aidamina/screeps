@@ -22,6 +22,7 @@ module.exports = {
             r.hostiles = room.find(FIND_HOSTILE_CREEPS);
             r.structures = room.find(FIND_STRUCTURES);
             r.my_creeps = room.find(FIND_MY_CREEPS);
+            r.construction_sites = room.find(FIND_CONSTRUCTION_SITES);
         }
         return state;
     }

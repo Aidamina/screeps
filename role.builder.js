@@ -13,7 +13,7 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(state, creep) {
-
+        var roomState = state.rooms[creep.room.name];
 	    if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
             
@@ -23,9 +23,13 @@ var roleBuilder = {
 	    }
 
 	    if(creep.memory.building) {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: object => object.hits < object.hitsMax
-                });
+             var targets = roomState.structures.filter((structure) => {
+                if (structure instanceof StructureWall || structure instanceof StructureRampart){
+                    return structure.hits < 50000;
+                }
+                return structure.hits < structure.hitsMax;
+                
+            });
             targets = targets.sort(function(a,b){return distance(creep, a)-distance(creep, b)});
             if(targets.length) {
                 creep.say("repairing");
@@ -33,7 +37,7 @@ var roleBuilder = {
                     creep.moveTo(targets[0]);
                 }
             }else{                
-                var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                var targets = roomState.construction_sites;
                 //targets = targets.sort(function(a,b) { return (a.hits/a.hitsMax) - (b.hits/b.hitsMax)});
                 targets = targets.sort(function(a,b) { return  (a.progressTotal-a.progress)-(b.progressTotal-b.progress)});
                 
@@ -49,7 +53,7 @@ var roleBuilder = {
             }
 	    }
 	    else {
-	        var sources = creep.room.find(FIND_STRUCTURES, {filter:function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer) && el.store[RESOURCE_ENERGY]>0}});
+	        var sources = roomState.structures.filter(function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer) && el.store[RESOURCE_ENERGY]>0});
             sources = sources.sort(function(a,b){return distance(creep, a)-distance(creep,b)});
             creep.say('refill');
             if(sources.length){
