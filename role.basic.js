@@ -24,8 +24,12 @@ var roleBasic = {
 	    }
 
 	    if(creep.memory.building) {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: object => object.hits < object.hitsMax
+            var targets = roomState.structures.filter((structure) => {
+                if (structure instanceof StructureWall){
+                    return structure.hits < 20000;
+                }
+                return structure.hits < structure.hitsMax;
+                
             });
 
             targets = targets.sort(function(a,b){return distance(creep, a)-distance(creep, b)});
