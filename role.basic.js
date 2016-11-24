@@ -24,6 +24,15 @@ var roleBasic = {
 	    }
 
 	    if(creep.memory.building) {
+
+            if(creep.room.controller.ticksToDowngrade < 2500) {
+                creep.say("upgrading");
+                if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.controller);
+                }
+                return;
+            }
+
             var targets = roomState.structures.filter((structure) => {
                 if (structure instanceof StructureWall){
                     return structure.hits < 20000;
@@ -62,7 +71,7 @@ var roleBasic = {
                     }
                     return;
                 }
-                targets = creep.room.find(FIND_CONSTRUCTION_SITES);  
+                targets = roomState.construction_sites;
                 if(targets.length) {
                    
                     targets = targets.sort(function(a,b) { return  (a.progressTotal-a.progress)-(b.progressTotal-b.progress)});
@@ -72,21 +81,13 @@ var roleBasic = {
                     }
                     return;
                 }
-                
-                
-                
-                
+             
                 if(!targets.length) {
                     creep.say("upgrading");
                     if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(creep.room.controller);
                     }
                 }
-
-
-
-
-
                
             }
 	    }

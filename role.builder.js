@@ -47,7 +47,7 @@ var roleBuilder = {
                         creep.moveTo(targets[0]);    
                     }
                 }else{
-                    creep.moveTo(Game.flags["Flag1"]); 
+                    creep.moveTo(Game.flags[roomState.name+"_Safety"]); 
                 }
                
             }
