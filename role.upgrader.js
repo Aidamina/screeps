@@ -13,7 +13,7 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(state, creep) {
-
+        var roomState = state.rooms[creep.room.name];
         if(creep.memory.upgrading && creep.carry.energy == 0) {
             creep.memory.upgrading = false;
             creep.say('harvesting');
@@ -29,7 +29,7 @@ var roleUpgrader = {
             }
         }
         else {
-            var sources = creep.room.find(FIND_STRUCTURES, {filter:function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer) && el.store[RESOURCE_ENERGY]>0}});
+            var sources = roomState.structures.filter(function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer) && el.store[RESOURCE_ENERGY]>0});
             sources.sort(function(a,b){return distance(creep, a)-distance(creep,b)});
             if(sources.length==0){
                 creep.moveTo(Game.flags["Flag1"]); 
@@ -38,12 +38,6 @@ var roleUpgrader = {
             if(creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0]);
             }
-            /*
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
-            }
-            */
         }
 	},
 	energyCharge:1500

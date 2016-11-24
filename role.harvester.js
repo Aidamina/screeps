@@ -14,6 +14,7 @@ var roleHarvester = {
     
     /** @param {Creep} creep **/
     run: function(state, creep) {
+        var roomState = state.rooms[creep.room.name];
 	    if(creep.carry.energy < creep.carryCapacity) {
             if(!creep.memory.target){
                 var targets = creep.room.sources.sort(function(a,b){return distance(creep, a)-distance(creep, b)});
@@ -39,32 +40,26 @@ var roleHarvester = {
 
         }
         else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        if(structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN){
-                            return structure.energy < structure.energyCapacity;
-                        }
-                        return false;
-                    }
+            var targets = roomState.structures.filter((structure) => {
+            if(structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN){
+                return structure.energy < structure.energyCapacity;
+                }
+                return false;
             });
-             if(!targets.length){
-                targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        if(structure.structureType == STRUCTURE_TOWER){
-                            return structure.energy < structure.energyCapacity;
-                        }
-                        return false;
+            if(!targets.length){
+                targets = roomState.structures.filter((structure) => {
+                    if(structure.structureType == STRUCTURE_TOWER){
+                        return structure.energy < structure.energyCapacity;
                     }
+                    return false;
                 });
             }
             if(!targets.length){
-                targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        if(structure.structureType == STRUCTURE_CONTAINER||structure.structureType == STRUCTURE_STORAGE){
-                            return structure.store[RESOURCE_ENERGY] < structure.storeCapacity;
-                        }
-                        return false;
+                targets = roomState.structures.filter((structure) => {
+                    if(structure.structureType == STRUCTURE_CONTAINER||structure.structureType == STRUCTURE_STORAGE){
+                        return structure.store[RESOURCE_ENERGY] < structure.storeCapacity;
                     }
+                    return false;
                 });
             }
 
