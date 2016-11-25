@@ -34,8 +34,31 @@ var roleBasic = {
             }
 
             var targets = roomState.structures.filter((structure) => {
-                if (structure instanceof StructureWall){
-                    return structure.hits < 50000;
+                if(structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN){
+                    return structure.energy < structure.energyCapacity;
+                    }
+                    return false;
+                });
+            if(!targets.length){
+                    targets = roomState.structures.filter((structure) => {
+                        if(structure.structureType == STRUCTURE_TOWER){
+                            return structure.energy < structure.energyCapacity;
+                        }
+                        return false;
+                    });
+                }
+            if(targets.length) {
+                targets = targets.sort(function(a,b){return distance(creep, a)-distance(creep, b)});
+                if(creep.transfer(targets[0], RESOURCE_ENERGY)== ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0]);
+                }
+                return;
+            }
+
+
+            targets = roomState.structures.filter((structure) => {
+                if (structure instanceof StructureWall || structure instanceof StructureRampart){
+                    return structure.hits < 100000;
                 }
                 return structure.hits < structure.hitsMax;
                 
@@ -48,7 +71,7 @@ var roleBasic = {
                     creep.moveTo(targets[0]);
                 }
             }else{
-                var targets = roomState.structures.filter((structure) => {
+                targets = roomState.structures.filter((structure) => {
                 if(structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN){
                     return structure.energy < structure.energyCapacity;
                     }

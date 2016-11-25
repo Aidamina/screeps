@@ -23,9 +23,14 @@ module.exports = {
 		    		}
 		    	}
 		    	for(var structure of roomState.structures){
-		    		if(structure instanceof StructureWall || structure instanceof StructureRampart){
+		    		if(structure instanceof StructureWall){
 
 		    		}else if(structure.hits < structure.hitsMax){
+		    			if(structure instanceof StructureRampart){
+		    				if(structure.hits > 100000){
+		    					continue;
+		    				}
+		    			}
 		    			towers.forEach(tower => { 
 		    				if(tower.energy > tower.energyCapacity/2){
 		    					tower.repair(structure)
