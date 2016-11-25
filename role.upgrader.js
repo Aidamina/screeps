@@ -31,8 +31,31 @@ var roleUpgrader = {
         else {
             var sources = roomState.structures.filter(function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer) && el.store[RESOURCE_ENERGY]>0});
             sources.sort(function(a,b){return distance(creep, a)-distance(creep,b)});
-            if(sources.length==0){
-                creep.moveTo(Game.flags["Flag1"]); 
+            if(!sources.length){
+                var sources = roomState.structures.filter(function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer)});
+                if(!sources.length){
+                    if(!creep.memory.target){
+                        var targets = creep.room.sources.sort(function(a,b){return distance(creep, a)-distance(creep, b)});
+                        creep.memory.target = targets[0].id;
+                    }
+
+                    var target = Game.getObjectById(creep.memory.target);
+                    var res = creep.harvest(target);
+                    if(res == ERR_NOT_IN_RANGE) {
+                        if(creep.moveTo(target)==ERR_NO_PATH){
+                            var targets = creep.room.sources.filter(function(source){return source.id!=creep.memory.target});
+                            if(targets.length){
+                                creep.memory.target = targets[0].id;
+                            }
+                        }
+                    }else if (res == ERR_NOT_ENOUGH_RESOURCES){                
+                        var targets = creep.room.sources.filter(function(source){return source.id!=creep.memory.target&&source.energy>0});
+                        if(targets.length){
+                            creep.memory.target = targets[0].id;
+                        }
+                    }
+                }
+               
                 return;
             }
             if(creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

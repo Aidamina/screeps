@@ -9,17 +9,29 @@
 var roles = require('utils.roles');
 var defaultCharge = 1500;
 var keepalive = {
-    handle : function(state, creep){
+    handle : function(roomState, creep){
+        if(creep.memory.role=='claimer'){
+            return true;
+        }
         var role = roles[creep.memory.role];
+
         var charge = (role?role.energyCharge:defaultCharge) || defaultCharge;
         var ticks = creep.ticksToLive;
+        var spawns = roomState.structures.filter(function(structure){return structure instanceof StructureSpawn});
+        if(!spawns.length){
+            console.log("no spawn found in "+roomState.name);
+            return true;
+        }
         if(ticks < charge){
-            result = Game.spawns['Hub'].renewCreep(creep);
+            result = spawns[0].renewCreep(creep);
             if(ticks < 500 && result==ERR_NOT_IN_RANGE){
                 console.log("Creep "+creep.name+" needs renewal");
-                creep.moveTo(Game.spawns['Hub']);
+                creep.moveTo(spawns[0]);
                 creep.say('renewal');
                 return false;
+
+                
+                
             }
             if(result==OK){
                 /*

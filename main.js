@@ -27,7 +27,13 @@ module.exports.loop = function () {
             inDefense = true;
         }
         for(var creep of roomState.my_creeps){
-            if(!keepalive.handle(state, creep)||inDefense){
+            if(creep.memory.room){
+                if(creep.room.name != creep.memory.target){
+                     creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(target)));
+                     continue;
+                }
+            }
+            if(!keepalive.handle(roomState, creep)||inDefense){
                 continue;
             }
             

@@ -10,20 +10,20 @@ var distance = require('utils.distance');
 var roomImport = require('utils.room');
 
 
- 
 var state = {}
 module.exports = {
     build: function(){
         state.rooms = {};
-        for(var id in Game.rooms){
-            var room = Game.rooms[id];
-            var r = state.rooms[id]={};
+        for(var name in Game.rooms){
+            var room = Game.rooms[name];
+            var r = state.rooms[name]={};
+            r.name = name;
             r.dropped = room.find(FIND_DROPPED_RESOURCES);
             r.hostiles = room.find(FIND_HOSTILE_CREEPS);
             r.structures = room.find(FIND_STRUCTURES);
             r.my_creeps = room.find(FIND_MY_CREEPS);
+            r.construction_sites = room.find(FIND_CONSTRUCTION_SITES);
         }
-        
         return state;
     }
 };

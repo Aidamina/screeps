@@ -23,8 +23,14 @@ module.exports = {
 		    		}
 		    	}
 		    	for(var structure of roomState.structures){
-		    		if(structure.hits < structure.hitsMax){
-		    			towers.forEach(tower => tower.repair(structure));
+		    		if(structure instanceof StructureWall || structure instanceof StructureRampart){
+
+		    		}else if(structure.hits < structure.hitsMax){
+		    			towers.forEach(tower => { 
+		    				if(tower.energy > tower.energyCapacity/2){
+		    					tower.repair(structure)
+		    				}
+		    			});
 		    		}
 		    	}
 		    }
