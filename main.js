@@ -28,7 +28,8 @@ module.exports.loop = function () {
         }
         for(var creep of roomState.my_creeps){
             if(creep.memory.room){
-                if(creep.room.name != creep.memory.target){
+                var target = creep.memory.room;
+                if(creep.room.name != target){
                      creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(target)));
                      continue;
                 }

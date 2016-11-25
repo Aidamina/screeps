@@ -37,7 +37,6 @@ var roleBasic = {
                 if (structure instanceof StructureWall){
                     return structure.hits < 50000;
                 }
-                return false;
                 return structure.hits < structure.hitsMax;
                 
             });
