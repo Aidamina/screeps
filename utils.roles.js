@@ -14,6 +14,7 @@ var roleBuilder = require('role.builder');
 var roleTransport = require('role.transport');
 var roleClaimer = require('role.claimer');
 var roleBasic = require('role.basic');
+var roleExtractor = require('role.extractor');
 
 module.exports = {
     'harvester': roleHarvester,
@@ -22,6 +23,7 @@ module.exports = {
     'builder': roleBuilder,
     'transport': roleTransport,
     'claimer': roleClaimer,
-    'basic': roleBasic
+    'basic': roleBasic,
+    'extractor': roleExtractor
 };
 

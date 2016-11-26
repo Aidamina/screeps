@@ -9,7 +9,7 @@
 var distance = require('utils.distance');
 
 
-//Game.spawns.Hub.createCreep([CARRY, CARRY, MOVE, MOVE, WORK, WORK], null, {role: 'harvester'});
+//Game.spawns.Hub.createCreep([CARRY, CARRY, MOVE, MOVE, WORK, WORK], null, {role: 'harvester', room:'W5N3'});
 var roleHarvester = {
     
     /** @param {Creep} creep **/
