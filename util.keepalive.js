@@ -19,7 +19,7 @@ var keepalive = {
         var ticks = creep.ticksToLive;
         var spawns = roomState.structures.filter(function(structure){return structure instanceof StructureSpawn});
         if(!spawns.length){
-            console.log("no spawn found in "+roomState.name);
+            console.log("no spawn found in "+roomState.name +" for "+creep.name);
             return true;
         }
         if(ticks < charge){
