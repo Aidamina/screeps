@@ -25,7 +25,7 @@ var roleBasic = {
 
 	    if(creep.memory.building) {
 
-            if(creep.room.controller.ticksToDowngrade < 2500) {
+            if(creep.room.controller.ticksToDowngrade < 3000) {
                 creep.say("upgrading");
                 if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller);
@@ -60,7 +60,7 @@ var roleBasic = {
                 if (structure instanceof StructureWall || structure instanceof StructureRampart){
                     return structure.hits < 100000;
                 }
-                return structure.hits < structure.hitsMax;
+                return structure.hits < structure.hitsMax *.8;
                 
             });
 

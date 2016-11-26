@@ -30,7 +30,7 @@ var roleUpgrader = {
         }
         else {
             var sources = roomState.structures.filter(function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer) && el.store[RESOURCE_ENERGY]>0});
-            sources.sort(function(a,b){return distance(creep, a)-distance(creep,b)});
+            sources.sort(distance.sortClosestTo(creep));
             if(!sources.length){
                 var sources = roomState.structures.filter(function(el){return (el instanceof StructureStorage || el instanceof  StructureContainer)});
                 if(!sources.length){
