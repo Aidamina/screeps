@@ -7,7 +7,7 @@
  * mod.thing == 'a thing'; // true
  */
 //Game.creeps.Skyler.memory = {role:'basic'}
-//Game.spawns.Hub.createCreep([CARRY, CARRY, MOVE, MOVE, WORK], null, {role:'basic', room:'W5N3'});
+//Game.spawns.Hub.createCreep([CARRY, CARRY, MOVE, MOVE, WORK], null, {role:'basic', room:'W8N3'});
 var distance = require('utils.distance');
 
 var roleBasic = {
