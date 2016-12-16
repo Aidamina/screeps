@@ -7,8 +7,7 @@
  * mod.thing == 'a thing'; // true
  */
 
-
- function pos(a){
+function pos(a){
  	if(a instanceof RoomPosition){
  		return a;
  	}else if( a instanceof RoomObject){

@@ -1,9 +1,11 @@
 var keepalive = require('util.keepalive');
 var lifecycle = require('utils.lifecycle');
-var stateobject = require('utils.state');
+var state = require('utils.state');
 var roles = require('utils.roles');
 var distance = require('utils.distance');
-var distance = require('utils.structure');
+var structures = require('utils.structure');
+require('utils.creep');
+var roads = require('utils.roads');
 var tasker = require('tasker');
 var turret = require('turret');
 var defense = require('defense');
@@ -12,12 +14,13 @@ var defense = require('defense');
 module.exports.loop = function () {
     Memory.ticks++;
     console.log(Memory.ticks);
-    var state = stateobject.build();
-    
+    state.update();
     lifecycle.handle(state);
 
     tasker(state);
     turret.operate(state);
+
+    roads();
     
     for(var id in state.rooms){
         var roomState = state.rooms[id];
@@ -27,6 +30,10 @@ module.exports.loop = function () {
             inDefense = true;
         }
         for(var creep of roomState.my_creeps){
+            if(creep.spawning){
+                continue;
+            }
+            console.log(creep.full);
             if(creep.memory.room){
                 var target = creep.memory.room;
                 if(creep.room.name != target){
@@ -46,10 +53,5 @@ module.exports.loop = function () {
         }
 
 
-    }
-    for(var name in Game.creeps) {
-        var creep = Game.creeps[name];
-        
-      
     }
 }
